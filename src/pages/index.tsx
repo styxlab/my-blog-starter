@@ -8,56 +8,46 @@ import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 
 type Data = {
-  site: {
-    siteMetadata: {
-      title: string
-    }
-  }
-  allMarkdownRemark: {
+  allGhostPost: {
     edges: {
       node: {
         excerpt: string
-        frontmatter: {
-          title: string
-          date: string
-          description: string
-        }
-        fields: {
-          slug: string
-        }
+        title: string
+        published_at: string
+        slug: string
       }
     }[]
   }
 }
 
 const BlogIndex = ({ data, location }: PageProps<Data>) => {
-  const siteTitle = data.site.siteMetadata.title
-  const posts = data.allMarkdownRemark.edges
+  const siteTitle = "Minimial Jamify"
+  const posts = data.allGhostPost.edges
 
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="All posts" />
       <Bio />
       {posts.map(({ node }) => {
-        const title = node.frontmatter.title || node.fields.slug
+        const title = node.title || node.slug
         return (
-          <article key={node.fields.slug}>
+          <article key={node.slug}>
             <header>
               <h3
                 style={{
                   marginBottom: rhythm(1 / 4),
                 }}
               >
-                <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
+                <Link style={{ boxShadow: `none` }} to={node.slug}>
                   {title}
                 </Link>
               </h3>
-              <small>{node.frontmatter.date}</small>
+              <small>{node.published_at}</small>
             </header>
             <section>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: node.frontmatter.description || node.excerpt,
+                  __html: node.excerpt,
                 }}
               />
             </section>
@@ -72,23 +62,13 @@ export default BlogIndex
 
 export const pageQuery = graphql`
   query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+    allGhostPost(sort: { fields: [published_at], order: DESC }) {
       edges {
         node {
+          slug
           excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            description
-          }
+          title
+          published_at          
         }
       }
     }
