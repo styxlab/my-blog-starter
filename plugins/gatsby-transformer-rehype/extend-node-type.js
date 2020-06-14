@@ -292,7 +292,7 @@ module.exports = ({
 
         resolve(htmlNode) {
           reporter.warn(`resolve html`);
-          return getHtml(htmlNode);
+          return null; //getHtml(htmlNode)
         }
 
       },
