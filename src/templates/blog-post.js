@@ -10,6 +10,8 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.allGhostPost.edges[0].node
   const siteTitle = "Minimial Jamify Source Ghost"
   const { previous, next } = pageContext
+  const transformedHtml = post.childHtmlRehype && post.childHtmlRehype.html
+  console.log(`slug: ${post.slug}, length: ${transformedHtml.length}`)
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -37,7 +39,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
             {post.published_at}
           </p>
         </header>
-        <section dangerouslySetInnerHTML={{ __html: post.html }} />
+        <section dangerouslySetInnerHTML={{ __html:  transformedHtml || post.html }} />
         <hr
           style={{
             marginBottom: rhythm(1),
@@ -90,7 +92,11 @@ export const pageQuery = graphql`
           excerpt
           html
           title
-          published_at          
+          published_at
+          childHtmlRehype {
+            html
+            tableOfContents
+          }          
         }
       }
     }
