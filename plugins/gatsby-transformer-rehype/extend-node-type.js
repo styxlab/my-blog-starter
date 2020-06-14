@@ -1,8 +1,7 @@
 "use strict";
 
-const _ = require(`lodash`);
+const _ = require(`lodash`); //const Promise = require(`bluebird`)
 
-const Promise = require(`bluebird`);
 
 const Rehype = require(`rehype`);
 

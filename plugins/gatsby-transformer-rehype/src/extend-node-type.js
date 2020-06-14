@@ -1,5 +1,5 @@
 const _ = require(`lodash`)
-const Promise = require(`bluebird`)
+//const Promise = require(`bluebird`)
 const Rehype = require(`rehype`)
 const stripPosition = require(`unist-util-remove-position`)
 const hastReparseRaw = require(`hast-util-raw`)
