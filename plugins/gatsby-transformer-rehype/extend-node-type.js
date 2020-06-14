@@ -291,7 +291,7 @@ module.exports = ({
 
         resolve(htmlNode) {
           reporter.warn(`resolve html`);
-          return htmlNode.internal.content; //getHtml(htmlNode)
+          return getHtml(htmlNode); //htmlNode.internal.content //
         }
 
       } //htmlAst: {
