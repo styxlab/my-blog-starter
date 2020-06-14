@@ -292,22 +292,20 @@ module.exports = ({
 
         resolve(htmlNode) {
           reporter.warn(`resolve html`);
-          return null; //getHtml(htmlNode)
+          return getHtml(htmlNode);
         }
 
       },
-      htmlAst: {
-        type: `JSON`,
-
-        resolve(htmlNode) {
-          return getHtmlAst(htmlNode).then(ast => {
-            reporter.warn(`resolve htmlAst`);
-            const strippedAst = stripPosition(_.clone(ast), true);
-            return hastReparseRaw(strippedAst);
-          });
-        }
-
-      },
+      //htmlAst: {
+      //    type: `JSON`,
+      //    resolve(htmlNode) {
+      //        return getHtmlAst(htmlNode).then((ast) => {
+      //        	reporter.warn(`resolve htmlAst`)
+      //            const strippedAst = stripPosition(_.clone(ast), true)
+      //            return hastReparseRaw(strippedAst)
+      //        })
+      //    },
+      //},
       tableOfContents: {
         type: `JSON`,
 
