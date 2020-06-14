@@ -27,6 +27,15 @@ module.exports = {
       },
     },
     {
+        resolve: require.resolve(`./plugins/gatsby-transformer-rehype`),
+        options: {
+            filter: node => (
+                node.internal.type === `GhostPost` ||
+                node.internal.type === `GhostPage`
+            ),
+        },
+    },
+    {
    	  resolve: `jamify-source-ghost`,
       options: {
         ghostConfig: {
@@ -70,15 +79,6 @@ module.exports = {
       options: {
         pathToConfigModule: `src/utils/typography`,
       },
-    },
-    {
-        resolve: require.resolve(`./plugins/gatsby-transformer-rehype`),
-        options: {
-            filter: node => (
-                node.internal.type === `GhostPost` ||
-                node.internal.type === `GhostPage`
-            ),
-        },
     },
   ],
 }
