@@ -39,7 +39,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
             {post.published_at}
           </p>
         </header>
-        <section dangerouslySetInnerHTML={{ __html:  transformedHtml || post.html }} />
+        <section dangerouslySetInnerHTML={{ __html:  post.html }} />
         <hr
           style={{
             marginBottom: rhythm(1),
