@@ -7098,6 +7098,24 @@ gatsby-recipes@^0.1.39:
     ws "^7.3.0"
     xstate "^4.10.0"
 
+gatsby-rehype-ghost-links@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/gatsby-rehype-ghost-links/-/gatsby-rehype-ghost-links-1.3.3.tgz#949c151bbfcce893dbb4099f5f8a77f63107e2b9"
+  integrity sha512-0FMkuwlF2RKuiZzrNhERvTP/qmqWt3Iyby8jsJX4259ET/h02zd7NkVr9bqFtRN/dFeT+aohWQu95Jjqo6EVGQ==
+  dependencies:
+    "@babel/runtime" "7.10.2"
+    lodash "^4.17.15"
+    unist-util-visit "^2.0.2"
+
+gatsby-rehype-prismjs@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/gatsby-rehype-prismjs/-/gatsby-rehype-prismjs-1.0.2.tgz#23e44a4aed8bab0abea24bf1acf4eeb8fe920610"
+  integrity sha512-0ubuQG7Lr5Xh5QyU6mjezxmAWKbG2omk4UJCv2PvIolGAr+vv33QfZyKrfYvz+3CZ5EEorrTWQxg7NvZwoC90g==
+  dependencies:
+    "@babel/runtime" "^7.10.2"
+    parse-numeric-range "^1.2.0"
+    unist-util-visit-parents "^3.0.2"
+
 gatsby-remark-copy-linked-files@^2.3.5:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/gatsby-remark-copy-linked-files/-/gatsby-remark-copy-linked-files-2.3.5.tgz#c0fbf1eb20ea4a902fdc0d07642277a0d76a2b48"
@@ -11280,6 +11298,11 @@ parse-numeric-range@^0.0.2:
   resolved "https://registry.yarnpkg.com/parse-numeric-range/-/parse-numeric-range-0.0.2.tgz#b4f09d413c7adbcd987f6e9233c7b4b210c938e4"
   integrity sha1-tPCdQTx6282Yf26SM8e0shDJOOQ=
 
+parse-numeric-range@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/parse-numeric-range/-/parse-numeric-range-1.2.0.tgz#aa70b00f29624ed13e9f943e9461b306e386b0fa"
+  integrity sha512-1q2tXpAOplPxcl8vrIGPWz1dJxxfmdRkCFcpxxMBerDnGuuHalOWF/xj9L8Nn5XoTUoB/6F0CeQBp2fMgkOYFg==
+
 parse-passwd@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/parse-passwd/-/parse-passwd-1.0.0.tgz#6d5b934a456993b23d37f40a382d6f1666a8e5c6"
@@ -15124,7 +15147,7 @@ unist-util-visit-parents@^2.0.0, unist-util-visit-parents@^2.1.2:
   dependencies:
     unist-util-is "^3.0.0"
 
-unist-util-visit-parents@^3.0.0:
+unist-util-visit-parents@^3.0.0, unist-util-visit-parents@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-3.0.2.tgz#d4076af3011739c71d2ce99d05de37d545f4351d"
   integrity sha512-yJEfuZtzFpQmg1OSCyS9M5NJRrln/9FbYosH3iW0MG402QbdbaB8ZESwUv9RO6nRfLAKvWcMxCwdLWOov36x/g==

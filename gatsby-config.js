@@ -78,6 +78,14 @@ module.exports = {
                 node.internal.type === `GhostPost` ||
                 node.internal.type === `GhostPage`
             ),
+            plugins: [
+                {
+                    resolve: `gatsby-rehype-ghost-links`,
+                },
+                {
+                    resolve: `gatsby-rehype-prismjs`,
+                },
+            ],
         },
     },
   ],
