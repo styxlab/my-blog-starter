@@ -72,7 +72,7 @@ module.exports = {
       },
     },
     {
-        resolve: `gatsby-transformer-rehype`,
+        resolve: require.resolve(`./plugins/gatsby-transformer-rehype`),
         options: {
             filter: node => (
                 node.internal.type === `GhostPost` ||
