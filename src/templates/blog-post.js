@@ -95,10 +95,11 @@ export const pageQuery = graphql`
           published_at
           childHtmlRehype {
             html
-            tableOfContents
           }          
         }
       }
     }
   }
 `
+
+// tableOfContents
