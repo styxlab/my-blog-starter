@@ -1,9 +1,10 @@
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
         html: String
-   		tableOfContents: JSON
     }
 `
+
+//    		tableOfContents: JSON
 
 // Is there a better way to check for existing types?
 const useTypeExists = (store, name) => (type) => {

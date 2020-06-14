@@ -275,13 +275,13 @@ module.exports = ({
             //        })
             //    },
             //},
-            tableOfContents: {
-                type: `JSON`,
-                resolve(htmlNode) {
-                    return toc //getHtmlAst(htmlNode)
-                        //.then(ast => getTableOfContents(htmlNode, ast))
-                },
-            },
+            //tableOfContents: {
+            //    type: `JSON`,
+            //    resolve(htmlNode) {
+            //        return toc //getHtmlAst(htmlNode)
+            //            //.then(ast => getTableOfContents(htmlNode, ast))
+            //    },
+            //},
         })
     })
 }
