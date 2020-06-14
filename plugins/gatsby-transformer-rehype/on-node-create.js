@@ -53,11 +53,7 @@ module.exports = async function onCreateNode({
       }
     };
     htmlNode.internal.contentDigest = createContentDigest(htmlNode);
-    createNode(htmlNode);
-    createParentChildLink({
-      parent: node,
-      child: htmlNode
-    });
+    createNode(htmlNode); //createParentChildLink({ parent: node, child: htmlNode })
   }
 
   const data = {};
