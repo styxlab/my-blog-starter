@@ -1,7 +1,8 @@
 "use strict";
 
-const _ = require(`lodash`); //const Promise = require(`bluebird`)
+const _ = require(`lodash`);
 
+const Promise = require(`bluebird`);
 
 const Rehype = require(`rehype`);
 
@@ -320,18 +321,16 @@ module.exports = ({
         }
 
       },
-      htmlAst: {
-        type: `JSON`,
-
-        resolve(htmlNode) {
-          return getHtmlAst(htmlNode).then(ast => {
-            reporter.warn(`resolve htmlAst`);
-            const strippedAst = stripPosition(_.clone(ast), true);
-            return hastReparseRaw(strippedAst);
-          });
-        }
-
-      },
+      //htmlAst: {
+      //    type: `JSON`,
+      //    resolve(htmlNode) {
+      //        return getHtmlAst(htmlNode).then((ast) => {
+      //        	reporter.warn(`resolve htmlAst`)
+      //            const strippedAst = stripPosition(_.clone(ast), true)
+      //            return hastReparseRaw(strippedAst)
+      //        })
+      //    },
+      //},
       tableOfContents: {
         type: `JSON`,
 
