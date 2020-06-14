@@ -3,14 +3,14 @@ const _ = require(`lodash`)
 const Rehype = require(`rehype`)
 const stripPosition = require(`unist-util-remove-position`)
 const hastReparseRaw = require(`hast-util-raw`)
-//const visit = require(`unist-util-visit`)
+const visit = require(`unist-util-visit`)
 
 let pluginsCacheStr = ``
 let pathPrefixCacheStr = ``
 const astCacheKey = node => `transformer-rehype-ast-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
 const htmlCacheKey = node => `transformer-rehype-html-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
 const htmlAstCacheKey = node => `transformer-rehype-html-ast-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
-//const tableOfContentsCacheKey = node => `transformer-rehype-html-toc-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
+const tableOfContentsCacheKey = node => `transformer-rehype-html-toc-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
 
 // TODO: remove this check with next major release
 const safeGetCache = ({ getCache, cache }) => (id) => {
@@ -105,7 +105,7 @@ module.exports = ({
                     return defaultFunction(
                         {
                             htmlAst,
-                            //generateTableOfContents,
+                            generateTableOfContents,
                             htmlNode,
                             getNode,
                             getNodesByType,
@@ -184,86 +184,80 @@ module.exports = ({
             }
         }
 
-        //function generateTableOfContents(htmlAst) {
-        //    const tags = [`h1`,`h2`,`h3`,`h4`,`h5`,`h6`]
-        //    const headings = node => tags.includes(node.tagName)
+        function generateTableOfContents(htmlAst) {
+            const tags = [`h1`,`h2`,`h3`,`h4`,`h5`,`h6`]
+            const headings = node => tags.includes(node.tagName)
 
-        //    // recursive walk to visit all children
-        //    const walk = (children, text = ``, depth = 0) => {
-        //        children.forEach((child) => {
-        //            if (child.type === `text`) {
-        //                text = text + child.value
-        //            } else if (child.children && depth < 3) {
-        //                depth = depth + 1
-        //                text = walk(child.children, text, depth)
-        //            }
-        //        })
-        //        return text
-        //    }
+            // recursive walk to visit all children
+            const walk = (children, text = ``, depth = 0) => {
+                children.forEach((child) => {
+                    if (child.type === `text`) {
+                        text = text + child.value
+                    } else if (child.children && depth < 3) {
+                        depth = depth + 1
+                        text = walk(child.children, text, depth)
+                    }
+                })
+                return text
+            }
 
-        //    let toc = []
-        //    visit(htmlAst, headings, (node) => {
-        //        const text = walk(node.children)
-        //        if (text.length > 0) {
-        //            const id = node.properties && node.properties.id || `error-missing-id`
-        //            const level = node.tagName.substr(1,1)
-        //            toc.push({ level: level, id: id, heading: text, parentIndex: -1, items: [] })
-        //        }
-        //    })
+            let toc = []
+            visit(htmlAst, headings, (node) => {
+                const text = walk(node.children)
+                if (text.length > 0) {
+                    const id = node.properties && node.properties.id || `error-missing-id`
+                    const level = node.tagName.substr(1,1)
+                    toc.push({ level: level, id: id, heading: text, parentIndex: -1, items: [] })
+                }
+            })
 
-        //    // Walk up the list to find matching parent
-        //    const findParent = (toc, parentIndex, level) => {
-        //        while (parentIndex >= 0 && level < toc[parentIndex].level) {
-        //            parentIndex = toc[parentIndex].parentIndex
-        //        }
-        //        return parentIndex >= 0 ? toc[parentIndex].parentIndex : -1
-        //    }
+            // Walk up the list to find matching parent
+            const findParent = (toc, parentIndex, level) => {
+                while (parentIndex >= 0 && level < toc[parentIndex].level) {
+                    parentIndex = toc[parentIndex].parentIndex
+                }
+                return parentIndex >= 0 ? toc[parentIndex].parentIndex : -1
+            }
 
-        //    // determine parents
-        //    toc.forEach((node, index) => {
-        //        const prev = toc[index > 0 ? index - 1 : 0]
-        //        node.parentIndex = node.level > prev.level ? node.parentIndex = index - 1 : prev.parentIndex
-        //        node.parentIndex = node.level < prev.level ? findParent(toc, node.parentIndex, node.level) : node.parentIndex
-        //    })
+            // determine parents
+            toc.forEach((node, index) => {
+                const prev = toc[index > 0 ? index - 1 : 0]
+                node.parentIndex = node.level > prev.level ? node.parentIndex = index - 1 : prev.parentIndex
+                node.parentIndex = node.level < prev.level ? findParent(toc, node.parentIndex, node.level) : node.parentIndex
+            })
 
-        //    // add children to their parent
-        //    toc.forEach(node => node.parentIndex >= 0 && toc[node.parentIndex].items.push(node))
+            // add children to their parent
+            toc.forEach(node => node.parentIndex >= 0 && toc[node.parentIndex].items.push(node))
 
-        //    // make final tree
-        //    let tocTree = toc.filter(({ parentIndex }) => parentIndex === -1)
+            // make final tree
+            let tocTree = toc.filter(({ parentIndex }) => parentIndex === -1)
 
-        //    // remove unneeded properties
-        //    const removeProps = ({ id, heading, items }) => ((items && items.length) > 0 ?
-        //        { id, heading, items: items.map(item => removeProps(item)) } : { id, heading })
-        //    tocTree = tocTree.map(node => removeProps(node))
+            // remove unneeded properties
+            const removeProps = ({ id, heading, items }) => ((items && items.length) > 0 ?
+                { id, heading, items: items.map(item => removeProps(item)) } : { id, heading })
+            tocTree = tocTree.map(node => removeProps(node))
 
-        //    return tocTree
-        //}
+            return tocTree
+        }
 
-        //async function getTableOfContents(htmlNode, htmlAst) {
-        //    const cachedToc = await cache.get(tableOfContentsCacheKey(htmlNode))
+        async function getTableOfContents(htmlNode, htmlAst) {
+            const cachedToc = await cache.get(tableOfContentsCacheKey(htmlNode))
 
-        //    if (cachedToc) {
-        //        return cachedToc
-        //    } else {
-        //        const tocTree = generateTableOfContents(htmlAst)
-        //        cache.set(tableOfContentsCacheKey(htmlNode), tocTree)
-        //        return tocTree
-        //    }
-        //}
-
-        //const toc = {
-        //    id: `test`,
-        //    heading: `Test`,
-        //    items: [],
-        //}
+            if (cachedToc) {
+                return cachedToc
+            } else {
+                const tocTree = generateTableOfContents(htmlAst)
+                cache.set(tableOfContentsCacheKey(htmlNode), tocTree)
+                return tocTree
+            }
+        }
 
         return resolve({
             html: {
                 type: `String`,
                 resolve(htmlNode) {
                 	reporter.warn(`resolve html`)
-                    return getHtml(htmlNode) //htmlNode.internal.content //
+                    return getHtml(htmlNode)
                 },
             },
             //htmlAst: {
@@ -276,13 +270,13 @@ module.exports = ({
             //        })
             //    },
             //},
-            //tableOfContents: {
-            //    type: `JSON`,
-            //    resolve(htmlNode) {
-            //        return toc //getHtmlAst(htmlNode)
-            //            //.then(ast => getTableOfContents(htmlNode, ast))
-            //    },
-            //},
+            tableOfContents: {
+                type: `JSON`,
+                resolve(htmlNode) {
+                    return getHtmlAst(htmlNode)
+                        .then(ast => getTableOfContents(htmlNode, ast))
+                },
+            },
         })
     })
 }
