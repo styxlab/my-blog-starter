@@ -260,16 +260,16 @@ module.exports = ({
                     return getHtml(htmlNode)
                 },
             },
-            //htmlAst: {
-            //    type: `JSON`,
-            //    resolve(htmlNode) {
-            //        return getHtmlAst(htmlNode).then((ast) => {
-            //        	reporter.warn(`resolve htmlAst`)
-            //            const strippedAst = stripPosition(_.clone(ast), true)
-            //            return hastReparseRaw(strippedAst)
-            //        })
-            //    },
-            //},
+            htmlAst: {
+                type: `JSON`,
+                resolve(htmlNode) {
+                    return getHtmlAst(htmlNode).then((ast) => {
+                    	reporter.warn(`resolve htmlAst`)
+                        const strippedAst = stripPosition(_.clone(ast), true)
+                        return hastReparseRaw(strippedAst)
+                    })
+                },
+            },
             tableOfContents: {
                 type: `JSON`,
                 resolve(htmlNode) {
