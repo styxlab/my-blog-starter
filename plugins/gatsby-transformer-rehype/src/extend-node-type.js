@@ -5,6 +5,11 @@ const stripPosition = require(`unist-util-remove-position`)
 const hastReparseRaw = require(`hast-util-raw`)
 const visit = require(`unist-util-visit`)
 
+// take an array and a function
+Promise.each = async function(arr, fn) { 
+   for(const item of arr) await fn(item);
+}
+
 let pluginsCacheStr = ``
 let pathPrefixCacheStr = ``
 const astCacheKey = node => `transformer-rehype-ast-${node.internal.contentDigest}-${pluginsCacheStr}-${pathPrefixCacheStr}`
