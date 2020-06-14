@@ -1,5 +1,5 @@
 const _ = require(`lodash`)
-const Promise = require(`bluebird`)
+//const Promise = require(`bluebird`)
 const Rehype = require(`rehype`)
 const stripPosition = require(`unist-util-remove-position`)
 const hastReparseRaw = require(`hast-util-raw`)
@@ -53,6 +53,7 @@ module.exports = ({
     const getCache = safeGetCache({ cache, getCache: possibleGetCache })
 
     return new Promise((resolve) => {
+        /* 
         const { fragment, space, emitParseErrors, verbose } = pluginOptions
         const rehypeOptions = _.merge({}, rehypeDefaults, { fragment, space, emitParseErrors, verbose })
 
@@ -181,7 +182,7 @@ module.exports = ({
                 reporter.warn(` return htmlAstt`)
                 return htmlAst
             }
-        }
+        } */
 
         //function generateTableOfContents(htmlAst) {
         //    const tags = [`h1`,`h2`,`h3`,`h4`,`h5`,`h6`]
@@ -251,11 +252,11 @@ module.exports = ({
         //    }
         //}
 
-        const toc = {
-            id: `test`,
-            heading: `Test`,
-            items: [],
-        }
+        //const toc = {
+        //    id: `test`,
+        //    heading: `Test`,
+        //    items: [],
+        //}
 
         return resolve({
             html: {
