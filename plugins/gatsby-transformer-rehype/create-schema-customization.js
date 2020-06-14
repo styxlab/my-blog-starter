@@ -3,9 +3,9 @@
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
         html: String!
+        tableOfContents: JSON!
     }
-`; //    		tableOfContents: JSON
-// Is there a better way to check for existing types?
+`; // Is there a better way to check for existing types?
 
 const useTypeExists = (store, name) => type => {
   const types = store.getState().schemaCustomization.types;
@@ -27,11 +27,13 @@ module.exports = (nodeApiArgs, pluginOptions = {}) => {
   const typeExists = useTypeExists(nodeApiArgs.store, `jamify-source-ghost`);
 
   if (!typeExists(`HtmlRehype`)) {
+    console.warn(`type created`);
     nodeApiArgs.actions.createTypes(typeDefs);
-  } // This allows subplugins to use Node APIs bound to `gatsby-transformer-remark`
+  }
+
+  console.warn(`Plugins: ${plugins.length}`); // This allows subplugins to use Node APIs bound to `gatsby-transformer-remark`
   // to customize the GraphQL schema. This makes it possible for subplugins to
   // modify types owned by `gatsby-transformer-html`.
-
 
   plugins.forEach(plugin => {
     const resolvedPlugin = require(plugin.resolve);

@@ -24,8 +24,11 @@ module.exports = (nodeApiArgs, pluginOptions = {}) => {
     const typeExists = useTypeExists(nodeApiArgs.store, `jamify-source-ghost`)
 
     if (!typeExists(`HtmlRehype`)) {
+    	console.warn(`type created`)
         nodeApiArgs.actions.createTypes(typeDefs)
     }
+
+    console.warn(`Plugins: ${plugins.length}`)
 
     // This allows subplugins to use Node APIs bound to `gatsby-transformer-remark`
     // to customize the GraphQL schema. This makes it possible for subplugins to
@@ -37,6 +40,5 @@ module.exports = (nodeApiArgs, pluginOptions = {}) => {
         }
     })
 
-    return {}
 }
 
