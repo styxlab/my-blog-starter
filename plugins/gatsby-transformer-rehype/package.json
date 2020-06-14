@@ -5,7 +5,7 @@
     "license": "MIT",
     "author": "styxlab",
     "homepage": "https://github.com/styxlab/",
-    "main": "index.js",
+    "main": "gatsby-node.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/styxlab/gatsby-theme-try-ghost/tree/master/packages/gatsby-transformer-rehype"
