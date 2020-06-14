@@ -24,11 +24,6 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
-  //function sleep(ms) {
-  //  return new Promise(resolve => setTimeout(resolve, ms));
-  //}
-  //await sleep(5000)
-
   // Create blog posts pages.
   const posts = result.data.allGhostPost.edges
   

@@ -23,23 +23,19 @@
     "gatsby-remark-responsive-iframe": "^2.4.5",
     "gatsby-remark-smartypants": "^2.3.4",
     "gatsby-source-filesystem": "^2.3.11",
+    "gatsby-transformer-rehype": "^1.5.0",
     "gatsby-transformer-remark": "^2.8.15",
     "gatsby-transformer-sharp": "^2.5.5",
-    "hast-util-raw": "^5.0.2",
     "jamify-source-ghost": "^1.9.0",
-    "lodash": "^4.17.15",
     "prismjs": "^1.20.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-typography": "^0.16.19",
-    "rehype": "^11.0.0",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75",
     "typography": "^0.16.19",
-    "typography-theme-wordpress-2016": "^0.16.19",
-    "unist-util-remove-position": "^2.0.1",
-    "unist-util-visit": "^2.0.2"
+    "typography-theme-wordpress-2016": "^0.16.19"
   },
   "devDependencies": {
     "prettier": "2.0.5"
