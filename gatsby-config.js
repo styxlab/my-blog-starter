@@ -71,14 +71,14 @@ module.exports = {
         pathToConfigModule: `src/utils/typography`,
       },
     },
-    //{
-    //    resolve: require.resolve(`./plugins/gatsby-transformer-rehype`),
-    //    options: {
-    //        filter: node => (
-    //            node.internal.type === `GhostPost` ||
-    //            node.internal.type === `GhostPage`
-    //        ),
-    //    },
-    //},
+    {
+        resolve: require.resolve(`./plugins/gatsby-transformer-rehype`),
+        options: {
+            filter: node => (
+                node.internal.type === `GhostPost` ||
+                node.internal.type === `GhostPage`
+            ),
+        },
+    },
   ],
 }
