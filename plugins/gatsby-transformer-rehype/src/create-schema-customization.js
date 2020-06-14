@@ -1,7 +1,7 @@
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
         html: String
-        tableOfContents: JSON
+   		tableOfContents: JSON
     }
 `
 
@@ -23,9 +23,9 @@ module.exports = (nodeApiArgs, pluginOptions = {}) => {
     const { plugins = [] } = pluginOptions
     const typeExists = useTypeExists(nodeApiArgs.store, `jamify-source-ghost`)
 
-    //if (!typeExists(`HtmlRehype`)) {
+    if (!typeExists(`HtmlRehype`)) {
         nodeApiArgs.actions.createTypes(typeDefs)
-    //}
+    }
 
     // This allows subplugins to use Node APIs bound to `gatsby-transformer-remark`
     // to customize the GraphQL schema. This makes it possible for subplugins to

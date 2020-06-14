@@ -33,7 +33,7 @@ module.exports = async function onCreateNode({
     return {};
   }
 
-  reporter.warn(`onCreateNode`);
+  reporter.warn(`onCreateNode: ${node.internal.type} `);
 
   function transformObject(data, id, type) {
     reporter.warn(`transformObject: ${id}`);
