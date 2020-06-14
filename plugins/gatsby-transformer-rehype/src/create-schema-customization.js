@@ -1,7 +1,8 @@
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
-        html: String!
-        tableOfContents: JSON!
+        html: String
+        htmlAst: JSON
+        tableOfContents: JSON
     }
 `
 

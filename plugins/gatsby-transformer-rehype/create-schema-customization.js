@@ -2,8 +2,9 @@
 
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
-        html: String!
-        tableOfContents: JSON!
+        html: String
+        htmlAst: JSON
+        tableOfContents: JSON
     }
 `; // Is there a better way to check for existing types?
 
