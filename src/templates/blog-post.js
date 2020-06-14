@@ -11,7 +11,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   const siteTitle = "Minimial Jamify Source Ghost"
   const { previous, next } = pageContext
   const transformedHtml = post.childHtmlRehype && post.childHtmlRehype.html
-  console.log(`slug: ${post.slug}, length: ${transformedHtml.length}`)
+  console.log(`slug: ${post.slug}, length: ${transformedHtml && transformedHtml.length}`)
 
   return (
     <Layout location={location} title={siteTitle}>
