@@ -132,6 +132,7 @@ module.exports = ({
         }
       });
       const htmlAst = rehype.parse(htmlNode.internal.content);
+      reporter.warn(`htmlAST`);
       await Promise.each(pluginOptions.plugins, plugin => {
         const requiredPlugin = require(plugin.resolve); // Allow both exports = function(), and exports.default = function()
 
@@ -159,6 +160,7 @@ module.exports = ({
           return Promise.resolve();
         }
       });
+      reporter.warn(`return htmlAST`);
       return htmlAst;
     }
 
@@ -167,9 +169,11 @@ module.exports = ({
       const cachedAST = await cache.get(cacheKey);
 
       if (cachedAST) {
+        reporter.warn(`cachedAST`);
         return cachedAST;
       } else if (ASTPromiseMap.has(cacheKey)) {
         // We are already generating AST, so let's wait for it
+        reporter.warn(`ASTPromiseMap`);
         return await ASTPromiseMap.get(cacheKey);
       } else {
         const ASTGenerationPromise = processHtmlAst(htmlNode);
@@ -183,6 +187,7 @@ module.exports = ({
         // We can now release promise, as we cached result
 
         ASTPromiseMap.set(cacheKey, ASTGenerationPromise);
+        reporter.warn(`return ASTPromiseMap`);
         return ASTGenerationPromise;
       }
     }
@@ -191,12 +196,14 @@ module.exports = ({
       const cachedHTML = await cache.get(htmlCacheKey(htmlNode));
 
       if (cachedHTML) {
+        reporter.warn(`cachedHTML`);
         return cachedHTML;
       } else {
         const htmlAst = await getAst(htmlNode);
         const html = rehype.stringify(htmlAst); // Save new HTML to cache
 
         cache.set(htmlCacheKey(htmlNode), html);
+        reporter.warn(`return html`);
         return html;
       }
     }
@@ -205,11 +212,13 @@ module.exports = ({
       const cachedAst = await cache.get(htmlAstCacheKey(htmlNode));
 
       if (cachedAst) {
+        reporter.warn(`getHtmlAst`);
         return cachedAst;
       } else {
         const htmlAst = await getAst(htmlNode); // Save new HTML AST to cache and return
 
         cache.set(htmlAstCacheKey(htmlNode), htmlAst);
+        reporter.warn(` return htmlAstt`);
         return htmlAst;
       }
     } //function generateTableOfContents(htmlAst) {
@@ -276,6 +285,7 @@ module.exports = ({
         type: `String`,
 
         resolve(htmlNode) {
+          reporter.warn(`resolve html`);
           return getHtml(htmlNode);
         }
 
@@ -285,6 +295,7 @@ module.exports = ({
 
         resolve(htmlNode) {
           return getHtmlAst(htmlNode).then(ast => {
+            reporter.warn(`resolve htmlAst`);
             const strippedAst = stripPosition(_.clone(ast), true);
             return hastReparseRaw(strippedAst);
           });

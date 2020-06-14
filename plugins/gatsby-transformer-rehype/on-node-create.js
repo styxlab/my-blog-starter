@@ -33,7 +33,10 @@ module.exports = async function onCreateNode({
     return {};
   }
 
+  reporter.warn(`onCreateNode`);
+
   function transformObject(data, id, type) {
+    reporter.warn(`transformObject: ${id}`);
     const {
       content,
       context,
@@ -69,6 +72,8 @@ module.exports = async function onCreateNode({
       data.context[field] = node[field];
     });
   }
+
+  reporter.warn(`before transformObject`);
 
   try {
     return transformObject(data, createNodeId(`${node.id} >>> ${type}`), type);

@@ -91,6 +91,7 @@ module.exports = ({
             })
 
             const htmlAst = rehype.parse(htmlNode.internal.content)
+            reporter.warn(`htmlAST`)
 
             await Promise.each(pluginOptions.plugins, (plugin) => {
                 const requiredPlugin = require(plugin.resolve)
@@ -119,6 +120,7 @@ module.exports = ({
                     return Promise.resolve()
                 }
             })
+            reporter.warn(`return htmlAST`)
             return htmlAst
         }
 
@@ -126,9 +128,11 @@ module.exports = ({
             const cacheKey = astCacheKey(htmlNode)
             const cachedAST = await cache.get(cacheKey)
             if (cachedAST) {
+            	reporter.warn(`cachedAST`)
                 return cachedAST
             } else if (ASTPromiseMap.has(cacheKey)) {
                 // We are already generating AST, so let's wait for it
+                reporter.warn(`ASTPromiseMap`)
                 return await ASTPromiseMap.get(cacheKey)
             } else {
                 const ASTGenerationPromise = processHtmlAst(htmlNode)
@@ -142,6 +146,7 @@ module.exports = ({
                 // Save new AST to cache and return
                 // We can now release promise, as we cached result
                 ASTPromiseMap.set(cacheKey, ASTGenerationPromise)
+                reporter.warn(`return ASTPromiseMap`)
                 return ASTGenerationPromise
             }
         }
@@ -149,6 +154,7 @@ module.exports = ({
         async function getHtml(htmlNode) {
             const cachedHTML = await cache.get(htmlCacheKey(htmlNode))
             if (cachedHTML) {
+            	reporter.warn(`cachedHTML`)
                 return cachedHTML
             } else {
                 const htmlAst = await getAst(htmlNode)
@@ -156,6 +162,7 @@ module.exports = ({
 
                 // Save new HTML to cache
                 cache.set(htmlCacheKey(htmlNode), html)
+                reporter.warn(`return html`)
                 return html
             }
         }
@@ -163,12 +170,14 @@ module.exports = ({
         async function getHtmlAst(htmlNode) {
             const cachedAst = await cache.get(htmlAstCacheKey(htmlNode))
             if (cachedAst) {
+            	reporter.warn(`getHtmlAst`)
                 return cachedAst
             } else {
                 const htmlAst = await getAst(htmlNode)
 
                 // Save new HTML AST to cache and return
                 cache.set(htmlAstCacheKey(htmlNode), htmlAst)
+                reporter.warn(` return htmlAstt`)
                 return htmlAst
             }
         }
@@ -245,6 +254,7 @@ module.exports = ({
             html: {
                 type: `String`,
                 resolve(htmlNode) {
+                	reporter.warn(`resolve html`)
                     return getHtml(htmlNode)
                 },
             },
@@ -252,6 +262,7 @@ module.exports = ({
                 type: `JSON`,
                 resolve(htmlNode) {
                     return getHtmlAst(htmlNode).then((ast) => {
+                    	reporter.warn(`resolve htmlAst`)
                         const strippedAst = stripPosition(_.clone(ast), true)
                         return hastReparseRaw(strippedAst)
                     })
