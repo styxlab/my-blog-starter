@@ -1,6 +1,6 @@
 const typeDefs = `
     type HtmlRehype implements Node @dontinfer {
-        html: String
+        html: String!
     }
 `
 

@@ -295,8 +295,7 @@ module.exports = ({
           return htmlNode.internal.content; //getHtml(htmlNode)
         }
 
-      },
-      //htmlAst: {
+      } //htmlAst: {
       //    type: `JSON`,
       //    resolve(htmlNode) {
       //        return getHtmlAst(htmlNode).then((ast) => {
@@ -306,15 +305,14 @@ module.exports = ({
       //        })
       //    },
       //},
-      tableOfContents: {
-        type: `JSON`,
+      //tableOfContents: {
+      //    type: `JSON`,
+      //    resolve(htmlNode) {
+      //        return toc //getHtmlAst(htmlNode)
+      //            //.then(ast => getTableOfContents(htmlNode, ast))
+      //    },
+      //},
 
-        resolve(htmlNode) {
-          return toc; //getHtmlAst(htmlNode)
-          //.then(ast => getTableOfContents(htmlNode, ast))
-        }
-
-      }
     });
   });
 };
