@@ -9,7 +9,12 @@ const stripPosition = require(`unist-util-remove-position`);
 
 const hastReparseRaw = require(`hast-util-raw`);
 
-const visit = require(`unist-util-visit`);
+const visit = require(`unist-util-visit`); // take an array and a function
+
+
+Promise.each = async function (arr, fn) {
+  for (const item of arr) await fn(item);
+};
 
 let pluginsCacheStr = ``;
 let pathPrefixCacheStr = ``;
@@ -320,16 +325,18 @@ module.exports = ({
         }
 
       },
-      //htmlAst: {
-      //    type: `JSON`,
-      //    resolve(htmlNode) {
-      //        return getHtmlAst(htmlNode).then((ast) => {
-      //        	reporter.warn(`resolve htmlAst`)
-      //            const strippedAst = stripPosition(_.clone(ast), true)
-      //            return hastReparseRaw(strippedAst)
-      //        })
-      //    },
-      //},
+      htmlAst: {
+        type: `JSON`,
+
+        resolve(htmlNode) {
+          return getHtmlAst(htmlNode).then(ast => {
+            reporter.warn(`resolve htmlAst`);
+            const strippedAst = stripPosition(_.clone(ast), true);
+            return hastReparseRaw(strippedAst);
+          });
+        }
+
+      },
       tableOfContents: {
         type: `JSON`,
 
