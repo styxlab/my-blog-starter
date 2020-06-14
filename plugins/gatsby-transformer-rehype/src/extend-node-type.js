@@ -53,7 +53,7 @@ module.exports = ({
     const getCache = safeGetCache({ cache, getCache: possibleGetCache })
 
     return new Promise((resolve) => {
-        /* 
+         
         const { fragment, space, emitParseErrors, verbose } = pluginOptions
         const rehypeOptions = _.merge({}, rehypeDefaults, { fragment, space, emitParseErrors, verbose })
 
@@ -182,7 +182,7 @@ module.exports = ({
                 reporter.warn(` return htmlAstt`)
                 return htmlAst
             }
-        } */
+        }
 
         //function generateTableOfContents(htmlAst) {
         //    const tags = [`h1`,`h2`,`h3`,`h4`,`h5`,`h6`]

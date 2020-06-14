@@ -75,127 +75,153 @@ module.exports = ({
     getCache: possibleGetCache
   });
   return new Promise(resolve => {
-    /* 
-    const { fragment, space, emitParseErrors, verbose } = pluginOptions
-    const rehypeOptions = _.merge({}, rehypeDefaults, { fragment, space, emitParseErrors, verbose })
-     // Setup rehype.
-    let rehype = new Rehype().data(`settings`, rehypeOptions)
-     for (let plugin of pluginOptions.plugins) {
-        const requiredPlugin = require(plugin.resolve)
-        if (_.isFunction(requiredPlugin.setParserPlugins)) {
-            for (let parserPlugin of requiredPlugin.setParserPlugins(plugin.pluginOptions)) {
-                if (_.isArray(parserPlugin)) {
-                    const [parser, options] = parserPlugin
-                    rehype = rehype.use(parser, options)
-                } else {
-                    rehype = rehype.use(parserPlugin)
-                }
-            }
+    const {
+      fragment,
+      space,
+      emitParseErrors,
+      verbose
+    } = pluginOptions;
+
+    const rehypeOptions = _.merge({}, rehypeDefaults, {
+      fragment,
+      space,
+      emitParseErrors,
+      verbose
+    }); // Setup rehype.
+
+
+    let rehype = new Rehype().data(`settings`, rehypeOptions);
+
+    for (let plugin of pluginOptions.plugins) {
+      const requiredPlugin = require(plugin.resolve);
+
+      if (_.isFunction(requiredPlugin.setParserPlugins)) {
+        for (let parserPlugin of requiredPlugin.setParserPlugins(plugin.pluginOptions)) {
+          if (_.isArray(parserPlugin)) {
+            const [parser, options] = parserPlugin;
+            rehype = rehype.use(parser, options);
+          } else {
+            rehype = rehype.use(parserPlugin);
+          }
         }
+      }
     }
-     async function processHtmlAst(htmlNode) {
-        // Use Bluebird's Promise function "each" to run rehype plugins serially.
-        await Promise.each(pluginOptions.plugins, (plugin) => {
-            const requiredPlugin = require(plugin.resolve)
-            if (_.isFunction(requiredPlugin.mutateSource)) {
-                return requiredPlugin.mutateSource({ htmlNode, getNode, getNodesByType,
-                    reporter, cache: getCache(plugin.name), getCache,
-                    compiler: {
-                        parseString: rehype.parse.bind(rehype),
-                        generateHTML: getHtml,
-                    },
-                    ...rest }, plugin.pluginOptions)
-            } else {
-                return Promise.resolve()
-            }
-        })
-         const htmlAst = rehype.parse(htmlNode.internal.content)
-        reporter.warn(htmlNode.internal.content)
-        reporter.warn(`htmlAST: ${htmlNode.id}`)
-         await Promise.each(pluginOptions.plugins, (plugin) => {
-            const requiredPlugin = require(plugin.resolve)
-            // Allow both exports = function(), and exports.default = function()
-            const defaultFunction = _.isFunction(requiredPlugin)
-                ? requiredPlugin
-                : _.isFunction(requiredPlugin.default) ? requiredPlugin.default : undefined
-            if (defaultFunction) {
-                return defaultFunction(
-                    {
-                        htmlAst,
-                        //generateTableOfContents,
-                        htmlNode,
-                        getNode,
-                        getNodesByType,
-                        basePath,
-                        reporter,
-                        cache: getCache(plugin.name),
-                        getCache,
-                        compiler: {
-                            parseString: rehype.parse.bind(rehype),
-                            generateHTML: getHtml,
-                        }, ...rest,
-                    }, plugin.pluginOptions)
-            } else {
-                return Promise.resolve()
-            }
-        })
-        reporter.warn(`return htmlAST`)
-        return htmlAst
-    }
-     async function getAst(htmlNode) {
-        const cacheKey = astCacheKey(htmlNode)
-        const cachedAST = await cache.get(cacheKey)
-        if (cachedAST) {
-        	reporter.warn(`cachedAST`)
-            return cachedAST
-        } else if (ASTPromiseMap.has(cacheKey)) {
-            // We are already generating AST, so let's wait for it
-            reporter.warn(`ASTPromiseMap`)
-            return await ASTPromiseMap.get(cacheKey)
+
+    async function processHtmlAst(htmlNode) {
+      // Use Bluebird's Promise function "each" to run rehype plugins serially.
+      await Promise.each(pluginOptions.plugins, plugin => {
+        const requiredPlugin = require(plugin.resolve);
+
+        if (_.isFunction(requiredPlugin.mutateSource)) {
+          return requiredPlugin.mutateSource({
+            htmlNode,
+            getNode,
+            getNodesByType,
+            reporter,
+            cache: getCache(plugin.name),
+            getCache,
+            compiler: {
+              parseString: rehype.parse.bind(rehype),
+              generateHTML: getHtml
+            },
+            ...rest
+          }, plugin.pluginOptions);
         } else {
-            const ASTGenerationPromise = processHtmlAst(htmlNode)
-            ASTGenerationPromise.then((htmlAst) => {
-                ASTPromiseMap.delete(cacheKey)
-                return cache.set(cacheKey, htmlAst)
-            }).catch((err) => {
-                ASTPromiseMap.delete(cacheKey)
-                return err
-            })
-            // Save new AST to cache and return
-            // We can now release promise, as we cached result
-            ASTPromiseMap.set(cacheKey, ASTGenerationPromise)
-            reporter.warn(`return ASTPromiseMap`)
-            return ASTGenerationPromise
+          return Promise.resolve();
         }
-    }
-     async function getHtml(htmlNode) {
-        const cachedHTML = await cache.get(htmlCacheKey(htmlNode))
-        if (cachedHTML) {
-        	reporter.warn(`cachedHTML`)
-            return cachedHTML
+      });
+      const htmlAst = rehype.parse(htmlNode.internal.content);
+      reporter.warn(htmlNode.internal.content);
+      reporter.warn(`htmlAST: ${htmlNode.id}`);
+      await Promise.each(pluginOptions.plugins, plugin => {
+        const requiredPlugin = require(plugin.resolve); // Allow both exports = function(), and exports.default = function()
+
+
+        const defaultFunction = _.isFunction(requiredPlugin) ? requiredPlugin : _.isFunction(requiredPlugin.default) ? requiredPlugin.default : undefined;
+
+        if (defaultFunction) {
+          return defaultFunction({
+            htmlAst,
+            //generateTableOfContents,
+            htmlNode,
+            getNode,
+            getNodesByType,
+            basePath,
+            reporter,
+            cache: getCache(plugin.name),
+            getCache,
+            compiler: {
+              parseString: rehype.parse.bind(rehype),
+              generateHTML: getHtml
+            },
+            ...rest
+          }, plugin.pluginOptions);
         } else {
-            const htmlAst = await getAst(htmlNode)
-            const html = rehype.stringify(htmlAst)
-             // Save new HTML to cache
-            cache.set(htmlCacheKey(htmlNode), html)
-            reporter.warn(`return html`)
-            return html
+          return Promise.resolve();
         }
+      });
+      reporter.warn(`return htmlAST`);
+      return htmlAst;
     }
-     async function getHtmlAst(htmlNode) {
-        const cachedAst = await cache.get(htmlAstCacheKey(htmlNode))
-        if (cachedAst) {
-        	reporter.warn(`getHtmlAst`)
-            return cachedAst
-        } else {
-            const htmlAst = await getAst(htmlNode)
-             // Save new HTML AST to cache and return
-            cache.set(htmlAstCacheKey(htmlNode), htmlAst)
-            reporter.warn(` return htmlAstt`)
-            return htmlAst
-        }
-    } */
-    //function generateTableOfContents(htmlAst) {
+
+    async function getAst(htmlNode) {
+      const cacheKey = astCacheKey(htmlNode);
+      const cachedAST = await cache.get(cacheKey);
+
+      if (cachedAST) {
+        reporter.warn(`cachedAST`);
+        return cachedAST;
+      } else if (ASTPromiseMap.has(cacheKey)) {
+        // We are already generating AST, so let's wait for it
+        reporter.warn(`ASTPromiseMap`);
+        return await ASTPromiseMap.get(cacheKey);
+      } else {
+        const ASTGenerationPromise = processHtmlAst(htmlNode);
+        ASTGenerationPromise.then(htmlAst => {
+          ASTPromiseMap.delete(cacheKey);
+          return cache.set(cacheKey, htmlAst);
+        }).catch(err => {
+          ASTPromiseMap.delete(cacheKey);
+          return err;
+        }); // Save new AST to cache and return
+        // We can now release promise, as we cached result
+
+        ASTPromiseMap.set(cacheKey, ASTGenerationPromise);
+        reporter.warn(`return ASTPromiseMap`);
+        return ASTGenerationPromise;
+      }
+    }
+
+    async function getHtml(htmlNode) {
+      const cachedHTML = await cache.get(htmlCacheKey(htmlNode));
+
+      if (cachedHTML) {
+        reporter.warn(`cachedHTML`);
+        return cachedHTML;
+      } else {
+        const htmlAst = await getAst(htmlNode);
+        const html = rehype.stringify(htmlAst); // Save new HTML to cache
+
+        cache.set(htmlCacheKey(htmlNode), html);
+        reporter.warn(`return html`);
+        return html;
+      }
+    }
+
+    async function getHtmlAst(htmlNode) {
+      const cachedAst = await cache.get(htmlAstCacheKey(htmlNode));
+
+      if (cachedAst) {
+        reporter.warn(`getHtmlAst`);
+        return cachedAst;
+      } else {
+        const htmlAst = await getAst(htmlNode); // Save new HTML AST to cache and return
+
+        cache.set(htmlAstCacheKey(htmlNode), htmlAst);
+        reporter.warn(` return htmlAstt`);
+        return htmlAst;
+      }
+    } //function generateTableOfContents(htmlAst) {
     //    const tags = [`h1`,`h2`,`h3`,`h4`,`h5`,`h6`]
     //    const headings = node => tags.includes(node.tagName)
     //    // recursive walk to visit all children
@@ -257,6 +283,8 @@ module.exports = ({
     //    heading: `Test`,
     //    items: [],
     //}
+
+
     return resolve({
       html: {
         type: `String`,
