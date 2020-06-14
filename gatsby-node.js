@@ -24,15 +24,20 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  await sleep(5000)
+
   // Create blog posts pages.
   const posts = result.data.allGhostPost.edges
-
+  
   posts.forEach(({ node }, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
     const next = index === 0 ? null : posts[index - 1].node
-
+  
     console.log(node.slug)
-
+  
     createPage({
       path: `/${node.slug}/`,
       component: blogPost,
