@@ -281,6 +281,11 @@ module.exports = ({
     //}
 
 
+    const toc = {
+      id: `test`,
+      heading: `Test`,
+      items: []
+    };
     return resolve({
       html: {
         type: `String`,
@@ -302,14 +307,16 @@ module.exports = ({
           });
         }
 
-      } //tableOfContents: {
-      //    type: `JSON`,
-      //    resolve(htmlNode) {
-      //        return getHtmlAst(htmlNode)
-      //            .then(ast => getTableOfContents(htmlNode, ast))
-      //    },
-      //},
+      },
+      tableOfContents: {
+        type: `JSON`,
 
+        resolve(htmlNode) {
+          return toc; //getHtmlAst(htmlNode)
+          //.then(ast => getTableOfContents(htmlNode, ast))
+        }
+
+      }
     });
   });
 };
