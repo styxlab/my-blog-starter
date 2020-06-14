@@ -92,7 +92,7 @@ module.exports = ({
 
             const htmlAst = rehype.parse(htmlNode.internal.content)
             reporter.warn(htmlNode.internal.content)
-            reporter.warn(`htmlAST: ${htmlNode.slug}`)
+            reporter.warn(`htmlAST: ${htmlNode.id}`)
 
             await Promise.each(pluginOptions.plugins, (plugin) => {
                 const requiredPlugin = require(plugin.resolve)
@@ -262,7 +262,7 @@ module.exports = ({
                 type: `String`,
                 resolve(htmlNode) {
                 	reporter.warn(`resolve html`)
-                    return getHtml(htmlNode)
+                    return htmlNode.internal.content //getHtml(htmlNode)
                 },
             },
             //htmlAst: {
